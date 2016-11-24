@@ -25,4 +25,4 @@ curl -Ss -H "Host: atilf.atilf.fr" -e "http://atilf.atilf.fr/academie9.htm" -A "
 def=`curl -Ss -H "Host: atilf.atilf.fr" -e "http://atilf.atilf.fr/academie9.htm" -A "Mozilla/5.0 (Windows NT 5.0; rv:5.0) Gecko/20100101 Firefox/5.0" "http://atilf.atilf.fr/dendien/scripts/generic/affiche.exe?6;s="$sid";d=1;f=255;t=255;r=1;"`
 
 # Display the defintion
-echo $def | html2text -unparse | grep -iv table | grep -iv tr | grep -iv td | grep -iv sultat | sed 's/&amp;#xA0;/<br>/g' | sed 's/&amp;#xAB;/«/g' | sed 's/&amp;#xBB;/»/g' | html2text -width `tput cols` -style pretty | sed 's/^(/\n(/g'
+echo $def | html2text -unparse -ascii | grep -iv table | grep -iv tr | grep -iv td | grep -iv sultat | sed 's/&amp;#xA0;/<br>/g' | sed 's/&amp;#xAB;/«/g' | sed 's/&amp;#xBB;/»/g' | html2text -width `tput cols` -style pretty | sed 's/^(/\n(/g'
