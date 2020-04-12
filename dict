@@ -1,10 +1,11 @@
 #!/bin/sh
 
-if [ $# -eq 0 ]
-then
-	echo "usage: $0 <word to define> or $0 -x <regex to search>"
+usage () {
+	echo "usage: $0 <word to define> or $0 -x <regex to search>" >&2
 	exit
-fi
+}
+
+[ $# -eq 0 ] && usage
 
 if [[ "$1" != "-x" ]]
 then
