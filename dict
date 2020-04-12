@@ -1,6 +1,7 @@
 #!/bin/sh
 
 HTTP_CMD='curl -Ss -H "Host: atilf.atilf.fr" -e "http://atilf.atilf.fr/academie9.htm" -A "Mozilla/5.0 (Windows NT 5.0; rv:5.0) Gecko/20100101 Firefox/5.0"'
+ENDPOINT='http://atilf.atilf.fr/dendien/scripts/generic/'
 
 usage () {
 	echo "usage: $0 <word to define> or $0 -x <regex to search>" >&2
@@ -19,13 +20,13 @@ else
 fi
 
 # Get a new sid
-sid=$($HTTP_CMD "http://atilf.atilf.fr/Dendien/scripts/generic/showps.exe?p=main.txt;host=interface_academie9.txt;java=no;" | sed 's/;/\n/g' | grep -m1 "s=" | sed 's/s=//')
+sid=$($HTTP_CMD $ENDPOINT/"showps.exe?p=main.txt;host=interface_academie9.txt;java=no;" | sed 's/;/\n/g' | grep -m1 "s=" | sed 's/s=//')
 
 # Here we send the data
-$HTTP_CMD "http://atilf.atilf.fr/dendien/scripts/generic/cherche.exe?15;s="$sid";;" -d "var0="$req"&var2="$regexreq"&var9=*!!*&var11=*!!*&var15=" > /dev/null
+$HTTP_CMD $ENDPOINT/"cherche.exe?15;s="$sid";;" -d "var0="$req"&var2="$regexreq"&var9=*!!*&var11=*!!*&var15=" > /dev/null
 
 # Retrieve the definition, which is bound to the sid, now.
-def=$($HTTP_CMD "http://atilf.atilf.fr/dendien/scripts/generic/affiche.exe?6;s="$sid";d=1;f=255;t=255;r=1;")
+def=$($HTTP_CMD $ENDPOINT/"affiche.exe?6;s="$sid";d=1;f=255;t=255;r=1;")
 
 # Display the defintion
 echo $def | html2text -unparse -ascii | grep -iv table | grep -iv tr | grep -iv td | grep -iv sultat | sed 's/&amp;#xA0;/<br>/g' | sed 's/&amp;#xAB;/«/g' | sed 's/&amp;#xBB;/»/g' | html2text -width $(tput cols) -style pretty | sed 's/^(/\n(/g'
